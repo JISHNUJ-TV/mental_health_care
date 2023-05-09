@@ -1,0 +1,99 @@
+{% block content %}
+{% load static %}
+
+{% include 'header.html' %}
+
+  <!--/ Intro Single star /-->
+  <section class="intro-single">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 col-lg-8">
+          <div class="title-single-box">
+            <h2 class="title-single">Diary</h2>
+          </div>
+        </div>
+      
+      </div>
+    </div>
+  </section>
+  <!--/ Intro Single End /-->
+
+  <!--/ Contact Star /-->
+  <section class="contact">
+    <div class="container">
+      <div class="row">
+       
+        <div class="col-sm-12 section-t8">
+          <div class="row">
+            <div class="col-md-6">
+              <form  action="diary" id="diary-form" method="post" >
+                {% csrf_token %}
+              
+                <div class="row">
+                    <h5 style="color:red">{{success}}</h5>
+                  <div class="col-md-12 mb-3">
+                    <div class="form-group">
+                      <input id="notes-input" name="notes" type="text" class="form-control" placeholder="Enter your daily thoughts in the form of diary">
+                      <input style="background-color: rgb(0, 0, 0);color:white" type="reset" value="clear">
+                    </div>
+                    <div>
+                      <p  style="color:green;"id="saved-notes"></p>
+                    </div>
+                  </div>
+                 
+                 
+                  <div class="col-md-12">
+                    <button type="submit" class="btn btn-a">Submit</button>
+                  </div>
+                </div>
+              </form>
+            </div> 
+            <script>
+              // get the form and input elements
+const diaryForm = document.getElementById('diary-form');
+const notesInput = document.getElementById('notes-input');
+const savedNotesElement = document.getElementById('saved-notes');
+
+// check if there is a saved value in session storage
+const savedNotes = sessionStorage.getItem('diaryNotes');
+if (savedNotes) {
+  // set the input field value to the saved value
+  notesInput.value = savedNotes;
+  // display the saved value below the input field
+  savedNotesElement.textContent = `Saved notes: ${savedNotes}`;
+}
+
+// add event listener for form submission
+diaryForm.addEventListener('submit', (event) => {
+  event.preventDefault(); // prevent the form from submitting
+  const notes = notesInput.value;
+  // save the notes value to session storage
+  sessionStorage.setItem('diaryNotes', notes);
+  // update the saved value element
+  savedNotesElement.textContent = `Saved notes: ${notes}`;
+  // submit the form to the server for further processing
+  diaryForm.submit();
+});
+
+              </script>
+            
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  {% if emotion%}
+
+ <center><div></div></center> 
+            <h2>Emotion : {{emotion}}</h2>
+            <h4 >{{suicide}} Tendency Detected</h4><br>
+            <h2>Suggestion</h2>
+            <h6>{{suggestion}}</h6><br>
+            </div></center>
+            {% endif %}
+  <!--/ Contact End /-->
+
+{% include 'footer.html' %}
+
+{% endblock %}
